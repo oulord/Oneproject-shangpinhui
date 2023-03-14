@@ -1,8 +1,10 @@
 <template>
   <div>
     <Header></Header>
-    这是根目录
-    <Footer></Footer>
+    <!-- 路由组件出口的地方 -->
+    <router-view></router-view>
+    <!-- 在Home、Search显示的，在Login、Register是隐藏的 -->
+    <Footer v-show="$route.meta.show"></Footer>
   </div>
 </template>
 
