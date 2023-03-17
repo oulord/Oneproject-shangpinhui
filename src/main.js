@@ -1,6 +1,12 @@
 import Vue from 'vue'
 import App from './App.vue'
 
+// 引入三级联动组件----注册为全局组件
+import TypeNav from '@/pages/Home/TypeNav'
+// 第一个参数：全局组件的名字 第二个参数：那一个组件
+Vue.component('TypeNav',TypeNav)
+
+// 引入路由
 import router from './router'
 
 Vue.config.productionTip = false
