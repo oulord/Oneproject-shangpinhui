@@ -9,6 +9,10 @@ Vue.component('TypeNav',TypeNav)
 // 引入路由
 import router from './router'
 
+// 测试接口
+import { reqCategoryList } from '@/api';
+reqCategoryList();
+
 Vue.config.productionTip = false
 
 new Vue({
