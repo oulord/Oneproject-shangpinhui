@@ -1,4 +1,4 @@
-// Home 页面的仓库
+// Home 模块的仓库
 const state = {}
 
 const mutations = {}

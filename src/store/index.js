@@ -30,15 +30,11 @@ Vue.use(Vuex)
 // 引入不同页面的仓库
 import Home from '@/store/Home'
 import Search from '@/store/Search'
-import Login from '@/store/Login'
-import Register from '@/store/Register'
 
 // 对外暴露Store类的一个实例
 export default new Vuex.Store({
     modules: {
         Home,
-        Search,
-        Login,
-        Register
+        Search
     }
 })

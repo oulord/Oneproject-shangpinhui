@@ -1,4 +1,4 @@
-// Search 页面的仓库
+// Search 模块的仓库
 const state = {}
 
 const mutations = {}
