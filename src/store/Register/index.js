@@ -1,4 +1,4 @@
-// Home 页面的仓库
+// Register 页面的仓库
 const state = {}
 
 const mutations = {}

@@ -1,4 +1,4 @@
-// Home 页面的仓库
+// Login 页面的仓库
 const state = {}
 
 const mutations = {}
