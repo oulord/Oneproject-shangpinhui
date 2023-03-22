@@ -5,6 +5,7 @@
       <!-- 运用了事件委派：将 .all 和 .sort 的事件委派给了父亲 div -->
       <div @mouseleave="leaveIndex">
         <h2 class="all">全部商品分类</h2>
+        <!-- 三级联动 -->
         <div class="sort">
           <div class="all-sort-list2">
             <div
@@ -14,9 +15,13 @@
               :class="{ cur: currentIndex == index }"
             >
               <h3 @mouseenter="changeIndex(index)">
-                <a href="">{{ c1.categoryName }}--{{ index }}</a>
+                <a href="">{{ c1.categoryName }}</a>
               </h3>
-              <div class="item-list clearfix">
+              <!-- 二级，三级分类，使用JS对二三级分类进行显示与隐藏 -->
+              <div
+                class="item-list clearfix"
+                :style="{ display: currentIndex == index ? 'block' : 'none' }"
+              >
                 <div
                   class="subitem"
                   v-for="(c2, index) in c1.categoryChild"
@@ -209,12 +214,6 @@ export default {
                   }
                 }
               }
-            }
-          }
-
-          &:hover {
-            .item-list {
-              display: block;
             }
           }
         }
