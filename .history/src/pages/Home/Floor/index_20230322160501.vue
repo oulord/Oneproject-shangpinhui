@@ -95,7 +95,7 @@
 
 <script>
 export default {
-  name: "Floor",
+  name: "Project04Index",
 
   data() {
     return {};

@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  name: "Recommend",
+  name: "Project04Index",
 
   data() {
     return {};

@@ -40,7 +40,7 @@
 
 <script>
 export default {
-  name: "Brand",
+  name: "Project04Index",
 
   data() {
     return {};

@@ -58,7 +58,7 @@
 
 <script>
 export default {
-  name: "Like",
+  name: "Project04Index",
 
   data() {
     return {};

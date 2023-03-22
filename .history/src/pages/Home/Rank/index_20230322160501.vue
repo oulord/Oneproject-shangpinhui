@@ -98,7 +98,7 @@
 
 <script>
 export default {
-  name: "Rank",
+  name: "Project04Index",
 
   data() {
     return {};

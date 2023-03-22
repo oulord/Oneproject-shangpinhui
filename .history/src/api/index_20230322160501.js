@@ -7,5 +7,6 @@ export const reqCategoryList = () => {
     return requests({
         url:'/product/getBaseCategoryList',
         method:'get',
+        
     })
 }
