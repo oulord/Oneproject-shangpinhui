@@ -7,6 +7,7 @@
         <h2 class="all">全部商品分类</h2>
         <!-- 三级联动 -->
         <div class="sort">
+          <!-- 利用事件委派 + 编程式导航 实现路由的跳转与传递参数 -->
           <div class="all-sort-list2" @click="goSearch">
             <div
               class="item"
@@ -15,7 +16,9 @@
               :class="{ cur: currentIndex == index }"
             >
               <h3 @mouseenter="changeIndex(index)">
-                <a>{{ c1.categoryName }}</a>
+                <a :data-CategoryName="c1.categoryName" :data-Category1Id="c1.categoryId">{{
+                  c1.categoryName
+                }}</a>
               </h3>
               <!-- 二级，三级分类，使用JS对二三级分类进行显示与隐藏 -->
               <div
@@ -29,14 +32,18 @@
                 >
                   <dl class="fore">
                     <dt>
-                      <a>{{ c2.categoryName }}</a>
+                      <a :data-CategoryName="c2.categoryName" :data-Category2Id="c2.categoryId">{{
+                        c2.categoryName
+                      }}</a>
                     </dt>
                     <dd>
                       <em
                         v-for="(c3, index) in c2.categoryChild"
                         :key="c3.categoryId"
                       >
-                        <a>{{ c3.categoryName }}</a>
+                        <a :data-CategoryName="c3.categoryName" :data-Category3Id="c3.categoryId">{{
+                          c3.categoryName
+                        }}</a>
                       </em>
                     </dd>
                   </dl>
@@ -107,10 +114,38 @@ export default {
 
     // 进行路由跳转的方法
     // 最好的解决方案：编程式导航 + 事件委派
-    // 利用事件委派存在一些问题：1、
-    goSearch(){
-      this.$router.push('/search')
-    }
+    // 利用事件委派存在一些问题：1、是把全部的子节点 【h3、dt、dl、em】的事件委派给父节点，但是点击a标签的时候，才回进行路由跳转
+    // 怎么能确定点击的一定是a标签？即使能确定点击的是a标签，如何区分是一级、二级、三级分类的标签？
+    goSearch(event) {
+      // this.$router.push('/search')
+      // 解决第一个问题方案：把子节点当中的 a 标签，加上自定义属性 data-categoryName，其余的子节点不加
+      let element = event.target;
+      // 获取到当前触发的这个事件的节点【h3、a、dt、dl】，需要带有 data-categoryname 这样的节点（一定是a标签）
+      // console.log(element);
+      // 节点有一个属性 dataset 属性，可以获取节点的自定义属性与属性值
+      // console.log(element.dataset); 
+      // {v-18b3c0cc: '', categoryname: '图书、音像、电子书刊', category1id: '1'}
+      let { categoryname,category1id,category2id,category3id } = element.dataset;
+      // 进行判断：如果标签身上拥有 categoryname 属性一定是a标签
+      if(categoryname){
+        // 如何判断是一级分类、二级分类、三级分类？再添加一个自定义属性进行判断
+        // 整理路由跳转的参数
+        let location = {name:"search"}
+        let query = {categoryName:categoryname}
+        if (category1id) {
+          query.category1Id = category1id
+        } else if (category2id) {
+          query.category2Id = category2id
+        } else if (category3id) {
+          query.category3Id = category3id
+        }
+        // 整理完参数
+        location.query = query
+        // console.log(query);
+        // 路由跳转
+        this.$router.push(location)
+      }
+    },
   },
 
   computed: {
