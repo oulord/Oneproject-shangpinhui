@@ -57,7 +57,7 @@ export default new VueRouter({
         },
         {
             name: "search",
-            path: '/search/:keyword',    //搜索页，接收参数进行占位
+            path: '/search/:keyword?',    //搜索页，接收参数进行占位
             component: Search,
             meta: { show: true }
         },

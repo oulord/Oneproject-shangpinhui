@@ -7,7 +7,7 @@
         <h2 class="all">全部商品分类</h2>
         <!-- 三级联动 -->
         <div class="sort">
-          <div class="all-sort-list2">
+          <div class="all-sort-list2" @click="goSearch">
             <div
               class="item"
               v-for="(c1, index) in categoryList"
@@ -15,7 +15,7 @@
               :class="{ cur: currentIndex == index }"
             >
               <h3 @mouseenter="changeIndex(index)">
-                <a href="">{{ c1.categoryName }}</a>
+                <a>{{ c1.categoryName }}</a>
               </h3>
               <!-- 二级，三级分类，使用JS对二三级分类进行显示与隐藏 -->
               <div
@@ -29,14 +29,14 @@
                 >
                   <dl class="fore">
                     <dt>
-                      <a href="">{{ c2.categoryName }}</a>
+                      <a>{{ c2.categoryName }}</a>
                     </dt>
                     <dd>
                       <em
                         v-for="(c3, index) in c2.categoryChild"
                         :key="c3.categoryId"
                       >
-                        <a href="">{{ c3.categoryName }}</a>
+                        <a>{{ c3.categoryName }}</a>
                       </em>
                     </dd>
                   </dl>
@@ -104,6 +104,13 @@ export default {
       // 鼠标移除 currentIndex，变回 -1
       this.currentIndex = -1;
     },
+
+    // 进行路由跳转的方法
+    // 最好的解决方案：编程式导航 + 事件委派
+    // 利用事件委派存在一些问题：1、
+    goSearch(){
+      this.$router.push('/search')
+    }
   },
 
   computed: {

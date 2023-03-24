@@ -7,7 +7,7 @@
 
 <script>
 export default {
-    name: 'Project04Index',
+    name: 'Search',
 
     data() {
         return {

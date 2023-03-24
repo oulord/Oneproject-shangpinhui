@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    name: 'Project04Index',
+    name: 'Login',
 
     data() {
         return {
