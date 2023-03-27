@@ -3,55 +3,64 @@
   <div class="type-nav">
     <div class="container">
       <!-- 运用了事件委派：将 .all 和 .sort 的事件委派给了父亲 div -->
-      <div @mouseleave="leaveIndex">
+      <div @mouseleave="leaveShow" @mouseenter="enterShow">
         <h2 class="all">全部商品分类</h2>
         <!-- 三级联动 -->
-        <div class="sort">
-          <!-- 利用事件委派 + 编程式导航 实现路由的跳转与传递参数 -->
-          <div class="all-sort-list2" @click="goSearch">
-            <div
-              class="item"
-              v-for="(c1, index) in categoryList"
-              :key="c1.categoryId"
-              :class="{ cur: currentIndex == index }"
-            >
-              <h3 @mouseenter="changeIndex(index)">
-                <a :data-CategoryName="c1.categoryName" :data-Category1Id="c1.categoryId">{{
-                  c1.categoryName
-                }}</a>
-              </h3>
-              <!-- 二级，三级分类，使用JS对二三级分类进行显示与隐藏 -->
+        <!-- 过度动画 -->
+        <transition name="sort">
+          <div class="sort" v-show="show">
+            <!-- 利用事件委派 + 编程式导航 实现路由的跳转与传递参数 -->
+            <div class="all-sort-list2" @click="goSearch">
               <div
-                class="item-list clearfix"
-                :style="{ display: currentIndex == index ? 'block' : 'none' }"
+                class="item"
+                v-for="(c1, index) in categoryList"
+                :key="c1.categoryId"
+                :class="{ cur: currentIndex == index }"
               >
+                <h3 @mouseenter="changeIndex(index)">
+                  <a
+                    :data-CategoryName="c1.categoryName"
+                    :data-Category1Id="c1.categoryId"
+                    >{{ c1.categoryName }}</a
+                  >
+                </h3>
+                <!-- 二级，三级分类，使用JS对二三级分类进行显示与隐藏 -->
                 <div
-                  class="subitem"
-                  v-for="(c2, index) in c1.categoryChild"
-                  :key="c2.categoryId"
+                  class="item-list clearfix"
+                  :style="{ display: currentIndex == index ? 'block' : 'none' }"
                 >
-                  <dl class="fore">
-                    <dt>
-                      <a :data-CategoryName="c2.categoryName" :data-Category2Id="c2.categoryId">{{
-                        c2.categoryName
-                      }}</a>
-                    </dt>
-                    <dd>
-                      <em
-                        v-for="(c3, index) in c2.categoryChild"
-                        :key="c3.categoryId"
-                      >
-                        <a :data-CategoryName="c3.categoryName" :data-Category3Id="c3.categoryId">{{
-                          c3.categoryName
-                        }}</a>
-                      </em>
-                    </dd>
-                  </dl>
+                  <div
+                    class="subitem"
+                    v-for="(c2, index) in c1.categoryChild"
+                    :key="c2.categoryId"
+                  >
+                    <dl class="fore">
+                      <dt>
+                        <a
+                          :data-CategoryName="c2.categoryName"
+                          :data-Category2Id="c2.categoryId"
+                          >{{ c2.categoryName }}</a
+                        >
+                      </dt>
+                      <dd>
+                        <em
+                          v-for="(c3, index) in c2.categoryChild"
+                          :key="c3.categoryId"
+                        >
+                          <a
+                            :data-CategoryName="c3.categoryName"
+                            :data-Category3Id="c3.categoryId"
+                            >{{ c3.categoryName }}</a
+                          >
+                        </em>
+                      </dd>
+                    </dl>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </transition>
       </div>
       <nav class="nav">
         <a href="###">服装城</a>
@@ -81,6 +90,7 @@ export default {
     return {
       // 存储用户鼠标移上哪一个一级分类
       currentIndex: -1,
+      show: true,
     };
   },
 
@@ -90,6 +100,12 @@ export default {
     // 添加命名空间写法： this.$store.dispatch("home/categoryList");
     this.$store.dispatch("categoryList");
     // console.log(this.$store.state.home.categoryList);
+
+    // 当组件挂载完毕，让show属性变为false
+    // 如果不是Home组件，将typeNav进行隐藏
+    if (this.$route.path != "/home") {
+      this.show = false;
+    }
   },
 
   methods: {
@@ -123,27 +139,42 @@ export default {
       // 获取到当前触发的这个事件的节点【h3、a、dt、dl】，需要带有 data-categoryname 这样的节点（一定是a标签）
       // console.log(element);
       // 节点有一个属性 dataset 属性，可以获取节点的自定义属性与属性值
-      // console.log(element.dataset); 
+      // console.log(element.dataset);
       // {v-18b3c0cc: '', categoryname: '图书、音像、电子书刊', category1id: '1'}
-      let { categoryname,category1id,category2id,category3id } = element.dataset;
+      let { categoryname, category1id, category2id, category3id } =
+        element.dataset;
       // 进行判断：如果标签身上拥有 categoryname 属性一定是a标签
-      if(categoryname){
+      if (categoryname) {
         // 如何判断是一级分类、二级分类、三级分类？再添加一个自定义属性进行判断
         // 整理路由跳转的参数
-        let location = {name:"search"}
-        let query = {categoryName:categoryname}
+        let location = { name: "search" };
+        let query = { categoryName: categoryname };
         if (category1id) {
-          query.category1Id = category1id
+          query.category1Id = category1id;
         } else if (category2id) {
-          query.category2Id = category2id
+          query.category2Id = category2id;
         } else if (category3id) {
-          query.category3Id = category3id
+          query.category3Id = category3id;
         }
         // 整理完参数
-        location.query = query
+        location.query = query;
         // console.log(query);
         // 路由跳转
-        this.$router.push(location)
+        this.$router.push(location);
+      }
+    },
+
+    // 当鼠标移入的时候，让商品列表进行展示
+    enterShow() {
+      if (this.$route.path != "/home") {
+        this.show = true;
+      }
+    },
+    // 当鼠标离开的时候，让商品分类列表进行隐藏
+    leaveShow() {
+      if (this.$route.path != "/home") {
+        this.currentIndex = -1;
+        this.show = false;
       }
     },
   },
@@ -276,6 +307,20 @@ export default {
           background: skyblue;
         }
       }
+    }
+
+    // 过渡动画的样式
+    // 过渡动画开始状态（进入）
+    .sort-enter{
+      height: 0px;
+    }
+    // 过渡动画结束状态（进入）
+    .sort-enter-to{
+      height: 461px;
+    }
+    // 定义动画时间、速率
+    .sort-enter-active{
+      transition:all .5s linear
     }
   }
 }
