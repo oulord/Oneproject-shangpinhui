@@ -14,6 +14,10 @@ import Footer from "./components/Footer";
 
 export default {
   name: "App",
+  mounted(){
+    // 派发一个 action 获取商品分类的三级列表的数据
+    this.$store.dispatch("categoryList");
+  },
   components: {
     Header,
     Footer,

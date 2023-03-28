@@ -98,7 +98,7 @@ export default {
   mounted() {
     // 通知vuex发送请求，获取数据，存储于仓库中
     // 添加命名空间写法： this.$store.dispatch("home/categoryList");
-    this.$store.dispatch("categoryList");
+    // this.$store.dispatch("categoryList");
     // console.log(this.$store.state.home.categoryList);
 
     // 当组件挂载完毕，让show属性变为false
@@ -123,10 +123,10 @@ export default {
     }, 50),
 
     // 一级分类鼠标移除的事件回调
-    leaveIndex() {
-      // 鼠标移除 currentIndex，变回 -1
-      this.currentIndex = -1;
-    },
+    // leaveIndex() {
+    //   // 鼠标移除 currentIndex，变回 -1
+    //   this.currentIndex = -1;
+    // },
 
     // 进行路由跳转的方法
     // 最好的解决方案：编程式导航 + 事件委派
@@ -175,6 +175,9 @@ export default {
       if (this.$route.path != "/home") {
         this.currentIndex = -1;
         this.show = false;
+      } else {
+        // 在 home 页面，一级分类鼠标移除的事件回调，鼠标移除 currentIndex，变回-1
+        this.currentIndex = -1
       }
     },
   },
@@ -311,16 +314,16 @@ export default {
 
     // 过渡动画的样式
     // 过渡动画开始状态（进入）
-    .sort-enter{
+    .sort-enter {
       height: 0px;
     }
     // 过渡动画结束状态（进入）
-    .sort-enter-to{
+    .sort-enter-to {
       height: 461px;
     }
     // 定义动画时间、速率
-    .sort-enter-active{
-      transition:all .5s linear
+    .sort-enter-active {
+      transition: all 0.5s linear;
     }
   }
 }
