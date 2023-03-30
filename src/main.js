@@ -16,6 +16,9 @@ import store from './store'
 import { reqCategoryList } from '@/api';
 reqCategoryList();
 
+// 引入MockServer.js-----mock数据
+import '@/mock/mockServe'
+
 Vue.config.productionTip = false
 
 new Vue({
