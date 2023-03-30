@@ -67,17 +67,30 @@ export default {
   methods: {
     // 搜索按钮的回调函数：需要向 search 路由进行跳转
     goSearch() {
-      // 路由传递参数：
+      // #region 路由传递参数：
       // 第一种：字符串形式
       // this.$router.push("/search/" + this.keyword + "?k=" + this.keyword);
       // 第二种：模板字符串
       // this.$router.push(`/search/${this.keyword}?k=${this.keyword}`)
       // 第三种：对象形式
-      this.$router.push({
-        name: "search",
-        params: { keyword: this.keyword },
-        query: { k: this.keyword},
-      });
+      // this.$router.push({
+      //   name: "search",
+      //   params: { keyword: this.keyword },
+      //   query: { k: this.keyword},
+      //#endregion });
+
+      // 判断：是否输入 params
+      if (this.$route.query) {
+        let location = {
+          name: "search",
+          // 解决 params 参数传递的是空串
+          params: {
+            keyword: this.keyword || undefined,
+          },
+        };
+        location.query = this.$route.query;
+        this.$router.push(location);
+      }
     },
   },
 };

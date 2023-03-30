@@ -120,7 +120,7 @@ export default {
     // 别使用箭头函数，否则 this 会丢失 https://blog.csdn.net/qq_40988677/article/details/121421615
     changeIndex: throttle(function (index) {
       this.currentIndex = index;
-    }, 50),
+    }, 20),
 
     // 一级分类鼠标移除的事件回调
     // leaveIndex() {
@@ -156,11 +156,15 @@ export default {
         } else if (category3id) {
           query.category3Id = category3id;
         }
-        // 整理完参数
-        location.query = query;
-        // console.log(query);
-        // 路由跳转
-        this.$router.push(location);
+        // 判断：如果路由跳转的时候，带有 params 参数，也要传递过去
+        if (this.$route.params) {
+          location.params = this.$route.params;
+          // 整理完参数
+          location.query = query;
+          // console.log(query);
+          // 路由跳转
+          this.$router.push(location);
+        }
       }
     },
 
@@ -172,13 +176,10 @@ export default {
     },
     // 当鼠标离开的时候，让商品分类列表进行隐藏
     leaveShow() {
+      this.currentIndex = -1
       if (this.$route.path != "/home") {
-        this.currentIndex = -1;
         this.show = false;
-      } else {
-        // 在 home 页面，一级分类鼠标移除的事件回调，鼠标移除 currentIndex，变回-1
-        this.currentIndex = -1
-      }
+      } 
     },
   },
 
