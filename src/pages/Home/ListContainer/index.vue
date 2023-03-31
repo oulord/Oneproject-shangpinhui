@@ -101,6 +101,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
   name: "ListContainer",
 
@@ -108,9 +109,18 @@ export default {
     return {};
   },
 
-  mounted() {},
+  mounted() {
+    // 派发action：通过Vuex发起Ajax请求，将数据储存在仓库中
+    this.$store.dispatch('getBannerList')
+  },
 
   methods: {},
+
+  computed:{
+    ...mapState({
+      bannerList:state=>state.home.bannerList
+    })
+  }
 };
 </script>
 
