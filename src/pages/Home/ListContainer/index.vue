@@ -6,8 +6,12 @@
         <!--banner轮播-->
         <div class="swiper-container" id="mySwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./images/banner1.jpg" />
+            <div
+              class="swiper-slide"
+              v-for="(carousel, index) in bannerList"
+              :key="carousel.id"
+            >
+              <img :src="carousel.imgUrl" />
             </div>
             <!-- <div class="swiper-slide">
               <img src="./images/banner2.jpg" />
@@ -101,7 +105,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
+// 引包
+import Swiper from "swiper";
 export default {
   name: "ListContainer",
 
@@ -111,16 +117,35 @@ export default {
 
   mounted() {
     // 派发action：通过Vuex发起Ajax请求，将数据储存在仓库中
-    this.$store.dispatch('getBannerList')
+    this.$store.dispatch("getBannerList");
+
+    // 在new swiper 实例之前，页面中结构必须有【现在把 new Swiper 实例放在 mounted 这里发现不行】
+    // 为什么不行？因为： dispatch 当中涉及到异步语句，导致 v-for 遍历的时候结构还没有加载数据
+    setTimeout(() => {
+      var mySwiper = new Swiper(document.querySelector(".swiper-container"), {
+        loop: true, // 循环模式选项
+        // 如果需要分页器
+        pagination: {
+          el: ".swiper-pagination",
+          clickable:true,
+        },
+        // 如果需要前进后退按钮
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+    },2000);
   },
 
   methods: {},
 
-  computed:{
+  computed: {
+    // 拿到仓库中的bannerList数据
     ...mapState({
-      bannerList:state=>state.home.bannerList
-    })
-  }
+      bannerList: (state) => state.home.bannerList,
+    }),
+  },
 };
 </script>
 
