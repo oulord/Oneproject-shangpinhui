@@ -6,6 +6,7 @@
     <Recommend />
     <Rank />
     <Like />
+    <!-- floorList 是一个数组，里面有两个对象 -->
     <Floor v-for="(floor,index) in floorList" :key="floor.id" :list="floor" />
     <Brand />
   </div>
