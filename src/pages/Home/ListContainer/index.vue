@@ -3,33 +3,8 @@
   <div class="list-container">
     <div class="sortList clearfix">
       <div class="center">
-        <!--banner轮播-->
-        <div class="swiper-container" ref="mySwiper">
-          <div class="swiper-wrapper">
-            <div
-              class="swiper-slide"
-              v-for="(carousel, index) in bannerList"
-              :key="carousel.id"
-            >
-              <img :src="carousel.imgUrl" />
-            </div>
-            <!-- <div class="swiper-slide">
-              <img src="./images/banner2.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner3.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner4.jpg" />
-            </div> -->
-          </div>
-          <!-- 如果需要分页器 -->
-          <div class="swiper-pagination"></div>
-
-          <!-- 如果需要导航按钮 -->
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
-        </div>
+        <!-- banner轮播图 -->
+        <Carousel :list="bannerList" />
       </div>
       <div class="right">
         <div class="news">
@@ -106,8 +81,6 @@
 
 <script>
 import { mapState } from "vuex";
-// 引包
-import Swiper from "swiper";
 export default {
   name: "ListContainer",
 
@@ -118,56 +91,6 @@ export default {
   mounted() {
     // 派发action：通过Vuex发起Ajax请求，将数据储存在仓库中
     this.$store.dispatch("getBannerList");
-
-    // 在new swiper 实例之前，页面中结构必须有【现在把 new Swiper 实例放在 mounted 这里发现不行】
-    // 为什么不行？因为： dispatch 当中涉及到异步语句，导致 v-for 遍历的时候结构还没有加载数据,主要原因还是由于JS事件循环机制导致的bug
-    //#region 方案一：
-    // setTimeout(() => {
-    //   var mySwiper = new Swiper(document.querySelector(".swiper-container"), {
-    //     loop: true, // 循环模式选项
-    //     // 如果需要分页器
-    //     pagination: {
-    //       el: ".swiper-pagination",
-    //       clickable:true,
-    //     },
-    //     // 如果需要前进后退按钮
-    //     navigation: {
-    //       nextEl: ".swiper-button-next",
-    //       prevEl: ".swiper-button-prev",
-    //     },
-    //   });
-    // },2000);
-  },
-
-  // #region 方案二
-  watch: {
-    // 监听bannerList数据的变化：因为这条数据发生过变化---由空数据变为四个数据
-    bannerList: {
-      handler(newValue, oldValue) {
-        // 通过 watch 监听 bannerList 属性的属性值的变化
-        // 执行handler方法，代表组件实例身上这个属性的属性已经有了四个数据
-        // netxTick：在下次DOM更新 循环结束之后 执行延迟回调。在 修改数据之后 立即使用这个方法，获取更新后的 DOM
-        this.$nextTick(() => {
-          // 当你执行这个回调的时候，保证服务器数据回来了，v-for执行完毕了
-          var mySwiper = new Swiper(
-            this.$refs.mySwiper,
-            {
-              loop: true, // 循环模式选项
-              // 如果需要分页器
-              pagination: {
-                el: ".swiper-pagination",
-                clickable: true,
-              },
-              // 如果需要前进后退按钮
-              navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-              },
-            }
-          );
-        });
-      },
-    },
   },
 
   methods: {},

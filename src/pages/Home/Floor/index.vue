@@ -6,7 +6,11 @@
         <h3 class="fl">{{ list.name }}</h3>
         <div class="fr">
           <ul class="nav-tabs clearfix">
-            <li class="active" v-for="(nav,index) in list.navList" :key="index">
+            <li
+              class="active"
+              v-for="(nav, index) in list.navList"
+              :key="index"
+            >
               <a href="#tab1" data-toggle="tab">{{ nav.text }}</a>
             </li>
           </ul>
@@ -24,24 +28,8 @@
               <img :src="list.imgUrl" />
             </div>
             <div class="floorBanner">
-              <!-- 轮播图 -->
-              <div class="swiper-container" ref="cur">
-                <div class="swiper-wrapper">
-                  <div
-                    class="swiper-slide"
-                    v-for="(carousel, index) in list.carouselList"
-                    :key="carousel.id"
-                  >
-                    <img :src="carousel.imgUrl" />
-                  </div>
-                </div>
-                <!-- 如果需要分页器 -->
-                <div class="swiper-pagination"></div>
-
-                <!-- 如果需要导航按钮 -->
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-              </div>
+              <!-- 轮播图的地方 -->
+              <Carousel :list="list.carouselList"/>
             </div>
             <div class="split">
               <span class="floor-x-line"></span>
@@ -72,8 +60,6 @@
 </template>
 
 <script>
-// 引包Swiper
-import Swiper from "swiper";
 export default {
   name: "Floor",
 
@@ -83,24 +69,7 @@ export default {
     return {};
   },
 
-  mounted() {
-    //在ListContainer中使用swiper时：为什么在mounted当中是不可以的，在这里为什么可以？
-    // 因为：第一次书写轮播图的时候，是在当前逐渐内部发请求，、动态渲染结构（前台至少服务器需要回来），因此在ListContainer中不能直接写
-    // 现在为什么可以？因为请求父组件发的，父组件通过props传递过来的数据，而且结构都已经有了的情况下执行mounted
-    var mySwiper = new Swiper(this.$refs.cur, {
-      loop: true, // 循环模式选项
-      // 如果需要分页器
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-      // 如果需要前进后退按钮
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-    });
-  },
+  mounted() {},
 
   methods: {},
 };
