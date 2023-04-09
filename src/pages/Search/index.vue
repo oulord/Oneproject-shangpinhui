@@ -470,6 +470,11 @@ export default {
   components: {
     SearchSelector,
   },
+
+  mounted() {
+    // 测试接口
+    this.$store.dispatch('getSearchList',{})
+  },
 };
 </script>
 

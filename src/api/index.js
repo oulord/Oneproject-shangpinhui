@@ -16,3 +16,11 @@ export const reqGetBannerList = ()=>mockRequests.get(`/banner`)
 
 // 获取floor数据
 export const reqFloorList = ()=>mockRequests.get(`/floor`)
+
+// 搜索模块的数据 地址：/api/list 方式：post 请求需要带参数
+// 注意！当前这个接口（获取搜索模块的数据），给服务器传递一个默认参数【至少是一个空对象】
+export const reqGetSearchInfo = (params)=>requests({
+    url:"/list",
+    method:"post",
+    data:params
+})

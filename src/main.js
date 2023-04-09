@@ -15,8 +15,10 @@ import router from './router'
 import store from './store'
 
 // 测试接口
-import { reqCategoryList } from '@/api';
+import { reqCategoryList,reqGetSearchInfo } from '@/api';
 reqCategoryList();
+// console.log(reqGetSearchInfo({}));
+
 
 // 引入MockServer.js-----mock数据
 import '@/mock/mockServe'
