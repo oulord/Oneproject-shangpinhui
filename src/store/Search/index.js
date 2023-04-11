@@ -22,7 +22,21 @@ const actions = {
     }
 }
 // 计算属性，在项目当中，为了简化数据而生
-const getters = {}
+// 项目当中getters主要的作用是：简化仓库中的数据（简化数据而生）
+// 可以把我们将来在组件当中需要用的数据简化一下（将来组件在获取数据的时候就方便许多）
+const getters = {
+    goodsList(state) {
+        // 加入没网或者网络不给力，state.searchList.goodsList应该返回的是undefined
+        // 计算新的属性的属性值至少给别人来一个空数组
+        return state.searchList.goodsList || []
+    },
+    trademarkList(state) {
+        return state.searchList.trademarkList
+    },
+    attrsList(state) {
+        return state.searchList.attrsList
+    }
+}
 
 export default {
     state,
