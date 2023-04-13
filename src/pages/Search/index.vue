@@ -138,13 +138,52 @@ import SearchSelector from "./SearchSelector/SearchSelector";
 export default {
   name: "Search",
 
+  data() {
+    return {
+      // 带给服务的的参数
+      searchParams: {
+        category1Id: " ", //一级分类的id
+        category2Id: " ", //二级分类的id
+        category3Id: " ", //三级分类的id
+        categoryName: " ", //分类的名字
+        keyword: " ", //关键字
+        order: " ", //排序
+        pageNo: 1, //分页器
+        pageSize: 10, //代表每一页展示的数据
+        props: [], //平台售卖的属性
+        trademark: " ", //品牌
+      },
+    };
+  },
+
   components: {
+    // 在发请求之前带给服务器参数(searchParams参数变化有数值带给服务器)
     SearchSelector,
+  },
+
+  // 当组件挂载完毕之前执行一次（先于mounted之前）
+  beforeMount() {
+    // 基础写法（不建议使用，太麻烦）
+    // this.searchParams.category1Id = this.$route.query.category1Id;
+    // this.searchParams.category2Id = this.$route.query.category2Id;
+    // this.searchParams.category3Id = this.$route.query.category3Id;
+    //…………
+
+    // 使用Object.assign：ES6的写法，合并对象
+    Object.assign(this.searchParams, this.$route.query, this.$route.params);
+    // return {...this.searchParams,...this.$route.query,...this.$route.params};
   },
 
   mounted() {
     // 测试接口
-    this.$store.dispatch("getSearchList", {});
+    this.getDate();
+  },
+
+  methods: {
+    // 下个服务器发请求获取search模块数据（根据参数不同返回不同的数据进行展示）
+    getDate() {
+      this.$store.dispatch("getSearchList", this.searchParams);
+    },
   },
 
   computed: {
