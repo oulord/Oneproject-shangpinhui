@@ -12,10 +12,7 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <li class="with-x" v-if="searchParams.categoryName">{{ searchParams.categoryName }}<i @click="removeCategoryName">×</i></li>
           </ul>
         </div>
 
@@ -184,6 +181,22 @@ export default {
     getDate() {
       this.$store.dispatch("getSearchList", this.searchParams);
     },
+
+    // 删除分类的名字
+    removeCategoryName(){
+      // 只是把服务器的参数置空了，还需要向服务器发请求
+      // 性能优化：带给服务器参数说明可有可无的，如果属性值为空的字符串还是会把相应的字段带给服务器，但是你把相应的字段变为undefined，当前这个字段不会带给服务器
+      this.searchParams.categoryName = undefined
+      this.searchParams.category1Id = undefined
+      this.searchParams.category2Id = undefined
+      this.searchParams.category3Id = undefined
+      this.getDate()
+      // 还有bug：地址栏的路径没有改变
+      // 办法：进行路由跳转(需严谨：本意是删除query，如果路径当中出现params不应该删除，路由跳转的时候应该带着)
+      if(this.$route.params){
+        this.$router.push({name:'search',params:this.$route.params})
+      }
+    }
   },
 
   computed: {
@@ -198,9 +211,9 @@ export default {
       Object.assign(this.searchParams,this.$route.query,this.$route.params)
       this.getDate()
       // 每一次请求完毕，应该把相应的1、2、3级分类的id置空，让它接收下一次的相应的1、2、3级id
-      this.searchParams.category1Id = ''
-      this.searchParams.category2Id = ''
-      this.searchParams.category3Id = ''
+      this.searchParams.category1Id = undefined
+      this.searchParams.category2Id = undefined
+      this.searchParams.category3Id = undefined
     }
   }
 };
