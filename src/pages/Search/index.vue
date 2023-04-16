@@ -190,6 +190,19 @@ export default {
     // mapGetters里面的写法：传递的数组，因为getters计算是没有划分模块【home，search】
     ...mapGetters(["goodsList"]),
   },
+
+  watch:{
+    // 监听路由的信息是否发生变化，如果发生变化，再次发起请求
+    $route(newValue,oldValue){
+      // 再次发起Ajax请求
+      Object.assign(this.searchParams,this.$route.query,this.$route.params)
+      this.getDate()
+      // 每一次请求完毕，应该把相应的1、2、3级分类的id置空，让它接收下一次的相应的1、2、3级id
+      this.searchParams.category1Id = ''
+      this.searchParams.category2Id = ''
+      this.searchParams.category3Id = ''
+    }
+  }
 };
 </script>
 
