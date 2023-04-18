@@ -12,12 +12,25 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x" v-if="searchParams.categoryName">{{ searchParams.categoryName }}<i @click="removeCategoryName">×</i></li>
+            <!-- 分类的面包屑 -->
+            <li class="with-x" v-if="searchParams.categoryName">
+              {{ searchParams.categoryName
+              }}<i @click="removeCategoryName">×</i>
+            </li>
+            <!-- 关键字的面包屑 -->
+            <li class="with-x" v-if="searchParams.keyword">
+              {{ searchParams.keyword }}<i @click="removekeyword">×</i>
+            </li>
+            <!-- 品牌的面包屑 -->
+            <li class="with-x" v-if="searchParams.trademark">
+              {{ searchParams.trademark.split(":")[1]
+              }}<i @click="removeTradeMark">×</i>
+            </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector @trademarkInfo="trademarkInfo" />
 
         <!--details-->
         <div class="details clearfix">
@@ -139,16 +152,26 @@ export default {
     return {
       // 带给服务的的参数
       searchParams: {
-        category1Id: " ", //一级分类的id
-        category2Id: " ", //二级分类的id
-        category3Id: " ", //三级分类的id
-        categoryName: " ", //分类的名字
-        keyword: " ", //关键字
-        order: " ", //排序
-        pageNo: 1, //分页器
-        pageSize: 10, //代表每一页展示的数据
-        props: [], //平台售卖的属性
-        trademark: " ", //品牌
+        //一级分类的id
+        category1Id: " ",
+        //二级分类的id
+        category2Id: " ",
+        //三级分类的id
+        category3Id: " ",
+        //分类的名字
+        categoryName: " ",
+        //关键字
+        keyword: " ",
+        //排序
+        order: " ",
+        //分页器
+        pageNo: 1,
+        //代表每一页展示的数据
+        pageSize: 10,
+        //平台售卖的属性
+        props: [],
+        //品牌
+        trademark: " ",
       },
     };
   },
@@ -173,29 +196,55 @@ export default {
 
   mounted() {
     // 测试接口
-    this.getDate();
+    this.getData();
   },
 
   methods: {
     // 下个服务器发请求获取search模块数据（根据参数不同返回不同的数据进行展示）
-    getDate() {
+    getData() {
       this.$store.dispatch("getSearchList", this.searchParams);
     },
 
     // 删除分类的名字
-    removeCategoryName(){
+    removeCategoryName() {
       // 只是把服务器的参数置空了，还需要向服务器发请求
       // 性能优化：带给服务器参数说明可有可无的，如果属性值为空的字符串还是会把相应的字段带给服务器，但是你把相应的字段变为undefined，当前这个字段不会带给服务器
-      this.searchParams.categoryName = undefined
-      this.searchParams.category1Id = undefined
-      this.searchParams.category2Id = undefined
-      this.searchParams.category3Id = undefined
-      this.getDate()
+      this.searchParams.categoryName = "";
+      this.searchParams.category1Id = "";
+      this.searchParams.category2Id = "";
+      this.searchParams.category3Id = "";
+      this.getData();
       // 还有bug：地址栏的路径没有改变
       // 办法：进行路由跳转(需严谨：本意是删除query，如果路径当中出现params不应该删除，路由跳转的时候应该带着)
-      if(this.$route.params){
-        this.$router.push({name:'search',params:this.$route.params})
+      if (this.$route.params) {
+        this.$router.push({ name: "search", params: this.$route.params });
       }
+    },
+
+    // 删除关键字
+    removekeyword() {
+      this.searchParams.keyword = "";
+      this.getData();
+      // 通知兄弟组件Header清除关键字
+      this.$bus.$emit("clear");
+      // 进行路由跳转
+      if (this.$route.query) {
+        this.$route.push({ name: "search", query: this.$route.query });
+      }
+    },
+
+    // 自定义的回调
+    trademarkInfo(trademark) {
+      // 整理品牌字段的参数 “ID：品牌名称”
+      this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`;
+      this.getData();
+    },
+
+    // 删除品牌的信息
+    removeTradeMark(){
+      this.searchParams.trademark = undefined
+      // 再次发请求
+      this.getData()
     }
   },
 
@@ -204,18 +253,18 @@ export default {
     ...mapGetters(["goodsList"]),
   },
 
-  watch:{
+  watch: {
     // 监听路由的信息是否发生变化，如果发生变化，再次发起请求
-    $route(newValue,oldValue){
+    $route(newValue, oldValue) {
       // 再次发起Ajax请求
-      Object.assign(this.searchParams,this.$route.query,this.$route.params)
-      this.getDate()
+      Object.assign(this.searchParams, this.$route.query, this.$route.params);
+      this.getData();
       // 每一次请求完毕，应该把相应的1、2、3级分类的id置空，让它接收下一次的相应的1、2、3级id
-      this.searchParams.category1Id = undefined
-      this.searchParams.category2Id = undefined
-      this.searchParams.category3Id = undefined
-    }
-  }
+      this.searchParams.category1Id = undefined;
+      this.searchParams.category2Id = undefined;
+      this.searchParams.category3Id = undefined;
+    },
+  },
 };
 </script>
 
