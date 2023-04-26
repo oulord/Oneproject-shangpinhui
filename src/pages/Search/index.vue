@@ -27,7 +27,12 @@
               }}<i @click="removeTradeMark">×</i>
             </li>
             <!-- 平台的售卖的属性值展示 -->
-            <li class="with-x" v-for="(attrValue,index) in searchParams.props" :key="index"> {{ attrValue.split(":")[1] }}<i @click="removeAttr(index)">×</i>
+            <li
+              class="with-x"
+              v-for="(attrValue, index) in searchParams.props"
+              :key="index"
+            >
+              {{ attrValue.split(":")[1] }}<i @click="removeAttr(index)">×</i>
             </li>
           </ul>
         </div>
@@ -39,25 +44,13 @@
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
-              <!-- 价格结构 -->
+              <!-- 价格结构（排序的结构） -->
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{ active: isOne }" @click="changeOrder('1')">
+                  <a>综合<span v-show="isOne">↓</span></a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{ active: isTwo }" @click="changeOrder('2')">
+                  <a>价格<span v-show="isTwo">↓</span></a>
                 </li>
               </ul>
             </div>
@@ -165,8 +158,8 @@ export default {
         categoryName: " ",
         //关键字
         keyword: " ",
-        //排序
-        order: " ",
+        //排序：初始状态应该是综合（降序）
+        order: " 1:desc ",
         //分页器
         pageNo: 1,
         //代表每一页展示的数据
@@ -237,16 +230,16 @@ export default {
     },
 
     // 删除品牌的信息
-    removeTradeMark(){
-      this.searchParams.trademark = undefined
+    removeTradeMark() {
+      this.searchParams.trademark = undefined;
       // 再次发请求
-      this.getData()
+      this.getData();
     },
 
     // 删除removeAttr售卖属性
-    removeAttr(index){
-      this.searchParams.props.splice(index,1)
-      this.getData()
+    removeAttr(index) {
+      this.searchParams.props.splice(index, 1);
+      this.getData();
     },
 
     // 自定义的回调（自定义事件）
@@ -257,22 +250,50 @@ export default {
     },
 
     // 收集平台属性地方回调函数（自定义事件）
-    attrInfo(attr,attrValue){
+    attrInfo(attr, attrValue) {
       //["属性ID：属性值：属性名"]
       // 参数格式整理好
-      let props = `${attr.attrId}:${attrValue}:${attr.attrName}`
+      let props = `${attr.attrId}:${attrValue}:${attr.attrName}`;
       // JS中的在数组末尾添加一个或多个元素 并进行判断（数组去重）
-      if(this.searchParams.props.indexOf(props)==-1){
-        this.searchParams.props.push(props)
+      if (this.searchParams.props.indexOf(props) == -1) {
+        this.searchParams.props.push(props);
       }
       // 再次发请求
+      this.getData();
+    },
+
+    // 排序操作
+    changeOrder(flag) {
+      // flag形参：是一个标记，代表用户点击的是综合（1）价格（2）用户点击的时候传递进来的
+      let originOrder = this.searchParams.order;
+      // 这里获取到的是最开始的状态
+      let originFlag = this.searchParams.order.split(":")[0];
+      let orginSort = this.searchParams.order.split(":")[1];
+      // 准备一个新的order属性值
+      let newOrder = "";
+      // 这个语句能确定点击的一定是综合
+      if (flag == originFlag) {
+        mewOrder = `${originFlag}:${orginSort == "desc" ? "asc" : "desc"}`;
+      }else{
+        // 点击的是价格
+        newOrder = `${flag}:${'desc'}`
+      }
+      // 将新的order赋予searchParams
+      this.searchParams.order = newOrder
+      // 再次发送请求
       this.getData()
-    }
+    },
   },
 
   computed: {
     // mapGetters里面的写法：传递的数组，因为getters计算是没有划分模块【home，search】
     ...mapGetters(["goodsList"]),
+    isOne() {
+      return this.searchParams.order.indexOf("1") != -1;
+    },
+    isTwo() {
+      return this.searchParams.order.indexOf("2") != -1;
+    },
   },
 
   watch: {
