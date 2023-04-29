@@ -11,22 +11,54 @@
     <button>7</button>
 
     <button>···</button>
-    <button>9</button>
+    <button>{{ totalPage }}</button>
     <button>下一页</button>
 
-    <button style="margin-left: 30px">共 60 条</button>
+    <button style="margin-left: 30px">共{{ total }}条</button>
   </div>
 </template>
 
 <script>
 export default {
   name: "Pagination",
+  props: ["pageNo", "pageSize", "total", "continues"],
+  computed: {
+    // 计算出总共多少页
+    totlPage() {
+      return Math.ceil(this.total / this.pageSize);
+    },
+    // 计算出连续的页码的起始数字与结束数字（连续的页码数字至少是5）
+    startNumAndEndNum() {
+      const { continues, pageNo, totalPage } = this;
+      // 先定义两个变量存储起始数字与结束数字
+      let start = 0;
+      let end = 0;
+      // 连续的页码数是5（至少5页）如果出现不够5页的数据，需要进行判断
+      if (continues > totalPage) {
+        start = 1;
+        end = totalPage;
+      } else {
+        start = pageNo - parseInt(continues / 2);
+        end = pageNo + parseInt(continues / 2);
+        // 出现不正常的现象（start数字出现0或负数）
+        if (start < 1) {
+          start = 1;
+          end = continues;
+        }
+        if (end > totalPage) {
+          end = totalPage;
+          start = totalPage - continues + 1;
+        }
+      }
+      return { start, end };
+    },
+  },
 };
 </script>
 
 <style lang="less" scoped>
 .pagination {
-    text-align: center;
+  text-align: center;
   button {
     margin: 0 5px;
     background-color: #f4f4f5;
