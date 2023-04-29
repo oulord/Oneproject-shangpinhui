@@ -104,7 +104,7 @@
           </div>
           <!-- 分页器 -->
           <!-- 先用死数据进行调试 -->
-          <Pagination :pageNo="1" :pageSize="3" :total="91" :continues="5"/>
+          <Pagination :pageNo="27" :pageSize="3" :total="91" :continues="5"/>
           </div>
         </div>
       </div>
