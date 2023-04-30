@@ -104,7 +104,7 @@
           </div>
           <!-- 分页器 -->
           <!-- 先用死数据进行调试 -->
-          <Pagination :pageNo="27" :pageSize="3" :total="91" :continues="5"/>
+          <Pagination :pageNo="searchParams.pageNo" :pageSize="searchParams.pageSize" :total="total" :continues="5" @getPageNo="getPageNo"/>
           </div>
         </div>
       </div>
@@ -113,7 +113,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import SearchSelector from "./SearchSelector/SearchSelector";
 export default {
   name: "Search",
@@ -137,7 +137,7 @@ export default {
         //分页器
         pageNo: 1,
         //代表每一页展示的数据
-        pageSize: 10,
+        pageSize: 3,
         //平台售卖的属性
         props: [],
         //品牌
@@ -248,15 +248,23 @@ export default {
       // 这个语句能确定点击的一定是综合
       if (flag == originFlag) {
         mewOrder = `${originFlag}:${orginSort == "desc" ? "asc" : "desc"}`;
-      }else{
+      } else {
         // 点击的是价格
-        newOrder = `${flag}:${'desc'}`
+        newOrder = `${flag}:${"desc"}`;
       }
       // 将新的order赋予searchParams
-      this.searchParams.order = newOrder
+      this.searchParams.order = newOrder;
       // 再次发送请求
-      this.getData()
+      this.getData();
     },
+
+    // 自定义事件的回调函数----获取当前第几页
+    getPageNo(pageNo){
+      // 整理带给服务器的参数
+      this.searchParams.pageNo = pageNo
+      // 再次发请求
+      this.getData()
+    }
   },
 
   computed: {
@@ -268,6 +276,16 @@ export default {
     isTwo() {
       return this.searchParams.order.indexOf("2") != -1;
     },
+    isAsc() {
+      return this.searchParams.order.indexOf("asc") != -1;
+    },
+    isDesc() {
+      return this.searchParams.order.indexOf("desc") != -1;
+    },
+    // 获取search模块展示产品一共多少数据
+    ...mapState({
+      total: (state) => state.search.searchList.total,
+    }),
   },
 
   watch: {
