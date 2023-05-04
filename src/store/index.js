@@ -32,6 +32,7 @@ import home from './Home'
 import search from './Search'
 import login from './Login'
 import register from './Register'
+import detail from "./detail";
 
 // 对外暴露Store类的一个实例
 export default new Vuex.Store({
@@ -39,6 +40,7 @@ export default new Vuex.Store({
         home,
         search,
         login,
-        register
+        register,
+        detail
     }
 })
