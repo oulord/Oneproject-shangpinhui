@@ -65,9 +65,10 @@
               >
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
-                      ><img :src="good.defaultImg"
-                    /></a>
+                    <!-- 在路由跳转的时候切记别忘记带id（params） -->
+                    <router-link :to="`/detail/${good.id}`">
+                    <img :src="good.defaultImg"/>
+                    </router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -259,12 +260,12 @@ export default {
     },
 
     // 自定义事件的回调函数----获取当前第几页
-    getPageNo(pageNo){
+    getPageNo(pageNo) {
       // 整理带给服务器的参数
-      this.searchParams.pageNo = pageNo
+      this.searchParams.pageNo = pageNo;
       // 再次发请求
-      this.getData()
-    }
+      this.getData();
+    },
   },
 
   computed: {
