@@ -20,7 +20,15 @@ const actions = {
     }
 }
 
-const getters = {}
+// 简化数据
+const getters = {
+    categoryView(state){
+        return state.goodInfo.categoryView || {}
+    },
+    skuInfo(state){
+        return state.goodInfo.skuInfo || {}
+    }
+}
 
 export default {
     state,
