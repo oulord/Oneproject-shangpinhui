@@ -1,18 +1,60 @@
 <template>
   <div class="spec-preview">
-    <img :src="skuImageList[0].imgUrl" />
-    <div class="event"></div>
+    <img :src="skuImageList[currentIndex].imgUrl" />
+    <div class="event" @mousemove="handler"></div>
     <div class="big">
-      <img :src="skuImageList[0].imgUrl" />
+      <img :src="skuImageList[currentIndex].imgUrl" ref="big"/>
     </div>
-    <div class="mask"></div>
+    <!-- 蒙版 -->
+    <div class="mask" ref="mask"></div>
   </div>
 </template>
 
 <script>
   export default {
     name: "Zoom",
-    props:['skuImageList']
+    data() {
+      return {
+        currentIndex:0
+      }
+    },
+    props:['skuImageList'],
+
+    mounted() {
+      // 全局事件总线：获取兄弟组件传递过来的索引值
+      this.$bus.$on('getIndex',(index)=>{
+        // 修改当前响应式数据
+        this.currentIndex = index
+      })
+    },
+
+    methods: {
+      handler(event){
+        let mask = this.$refs.mask
+        let big = this.$refs.big
+        let left = event.offsetX - mask.offsetWidth / 2
+        let top = event.offsetY - mask.offsetHeight / 2
+        // 约束范围
+        if(left <= 0){
+          left = 0
+        }
+        if(left >= mask.offsetWidth){
+          left = mask.offsetWidth
+        }
+        if(top <= 0){
+          top = 0
+        }
+        if(top >= mask.offsetHeight){
+          top = mask.offsetHeight
+        }
+        // 修改元素的 left 与 top 属性值
+        mask.style.left = left + 'px'
+        mask.style.top = top + 'px'
+        // 大图移动
+        big.style.left = -2 * left + 'px'
+        big.style.top = -2 * top + 'px'
+      }
+    },
   }
 </script>
 
