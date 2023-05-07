@@ -30,8 +30,11 @@
 
     methods: {
       handler(event){
+        // 获取蒙版元素
         let mask = this.$refs.mask
+        // 获取大图元素
         let big = this.$refs.big
+        
         let left = event.offsetX - mask.offsetWidth / 2
         let top = event.offsetY - mask.offsetHeight / 2
         // 约束范围

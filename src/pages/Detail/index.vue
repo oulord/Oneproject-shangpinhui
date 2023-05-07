@@ -101,9 +101,9 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input autocomplete="off" class="itxt" v-model="skuNum" @change="changeSkuNum"/>
+                <a href="javascript:" class="plus" @click="skuNum++">+</a>
+                <a href="javascript:" class="mins" @click="skuNum>1?skuNum--:1">-</a>
               </div>
               <div class="add">
                 <a href="javascript:">加入购物车</a>
@@ -351,6 +351,12 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "Detail",
+  data() {
+    return {
+      // 购买产品的个数
+      skuNum:1
+    }
+  },
 
   components: {
     ImageList,
@@ -371,6 +377,19 @@ export default {
       });
       // 点击那个售卖属性值就有高亮
       saleAttrValue.isChecked = 1
+    },
+
+    // 表单元素修改产品个数
+    changeSkuNum(event){
+      // 用户输入进来的 文本 * 1
+      let value = event.target.value * 1
+      // 如果用户输入进来的非法,出现 NaN 或则小于 1
+      if(isNaN(value) || value < 1){
+        this.skuNum = 1
+      }else{
+        // 正常大于1，但不能是小数
+        this.skuNum = parseInt(value)
+      }
     }
   },
 
