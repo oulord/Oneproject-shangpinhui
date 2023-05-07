@@ -4,9 +4,16 @@ import Login from '@/pages/Login'
 import Register from '@/pages/Register'
 import Search from '@/pages/Search'
 import Detail from '@/pages/Detail'
+import AddCartSuccess from '@/pages/AddCartSuccess'
 
 // 路由配置信息
 export default [
+    {
+        name: "addcartsuccess",
+        path: '/addcartsuccess',
+        component: AddCartSuccess,
+        meta: { isShow: true }
+    },
     {
         name: "detail",
         path: '/detail/:skuid',

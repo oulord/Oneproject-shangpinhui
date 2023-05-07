@@ -93,7 +93,12 @@
                     spuSaleAttrValue, index
                   ) in spuSaleAttr.spuSaleAttrValueList"
                   :key="spuSaleAttrValue.id"
-                  @click="changeActive(spuSaleAttrValue,spuSaleAttr.spuSaleAttrValueList)"
+                  @click="
+                    changeActive(
+                      spuSaleAttrValue,
+                      spuSaleAttr.spuSaleAttrValueList
+                    )
+                  "
                 >
                   {{ spuSaleAttrValue.saleAttrValueName }}
                 </dd>
@@ -101,9 +106,19 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" v-model="skuNum" @change="changeSkuNum"/>
+                <input
+                  autocomplete="off"
+                  class="itxt"
+                  v-model="skuNum"
+                  @change="changeSkuNum"
+                />
                 <a href="javascript:" class="plus" @click="skuNum++">+</a>
-                <a href="javascript:" class="mins" @click="skuNum>1?skuNum--:1">-</a>
+                <a
+                  href="javascript:"
+                  class="mins"
+                  @click="skuNum > 1 ? skuNum-- : 1"
+                  >-</a
+                >
               </div>
               <div class="add">
                 <!-- 以前的路由跳转：从A路由跳转到B路由，这里在加入购物车，进行路由跳转之前，
@@ -356,8 +371,8 @@ export default {
   data() {
     return {
       // 购买产品的个数
-      skuNum:1
-    }
+      skuNum: 1,
+    };
   },
 
   components: {
@@ -370,37 +385,47 @@ export default {
     this.$store.dispatch("getGoodInfo", this.$route.params.skuid);
   },
 
-  methods:{
+  methods: {
     // 产品的售卖属性值切换高亮
-    changeActive(saleAttrValue,arr){
+    changeActive(saleAttrValue, arr) {
       // 遍历全部售卖属性值isChecked为0，则全部没有高亮了
-      arr.forEach(item => {
-        item.isChecked = 0
+      arr.forEach((item) => {
+        item.isChecked = 0;
       });
       // 点击那个售卖属性值就有高亮
-      saleAttrValue.isChecked = 1
+      saleAttrValue.isChecked = 1;
     },
 
     // 表单元素修改产品个数
-    changeSkuNum(event){
+    changeSkuNum(event) {
       // 用户输入进来的 文本 * 1
-      let value = event.target.value * 1
+      let value = event.target.value * 1;
       // 如果用户输入进来的非法,出现 NaN 或则小于 1
-      if(isNaN(value) || value < 1){
-        this.skuNum = 1
-      }else{
+      if (isNaN(value) || value < 1) {
+        this.skuNum = 1;
+      } else {
         // 正常大于1，但不能是小数
-        this.skuNum = parseInt(value)
+        this.skuNum = parseInt(value);
       }
     },
 
     // 加入购物车的函数
-    addshopcar(){
+    async addshopcar() {
       // 1、发请求-----将产品加入到数据库（通知服务器）
-      this.$store.dispatch('addOrUpdateShopCart',{skuId:this.$route.params.skuid,skuNum:this.skuNum})
-      // 2、服务器存储成功------进行路由跳转
-      // 3、失败----给用户提示
-    }
+      // let result = await this.$store.dispatch('addOrUpdateShopCart',{skuId:this.$route.params.skuid,skuNum:this.skuNum})
+      try {
+        // 2、服务器存储成功------进行路由跳转
+        await this.$store.dispatch("addOrUpdateShopCart", {
+          skuId: this.$route.params.skuid,
+          skuNum: this.skuNum,
+        });
+        // 路由跳转
+        this.$router.push({ name: "addcartsuccess" });
+      } catch (error) {
+        // 3、失败----给用户提示
+        alert(error.message);
+      }
+    },
   },
 
   computed: {
