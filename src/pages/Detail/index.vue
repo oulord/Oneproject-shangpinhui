@@ -420,7 +420,15 @@ export default {
           skuNum: this.skuNum,
         });
         // 路由跳转
-        this.$router.push({ name: "addcartsuccess" });
+        // 在路由跳转的时候还需要将产品的信息带给下一级的路由组件
+        // 第一种方式：query传参，功能虽实现，但是会使路由特别繁琐
+        // this.$router.push({ name: "addcartsuccess",query:{skuInfo:this.skuInfo,skuNum:this.skuNum} });
+        // 第二种方式：路由传参结合会话存储
+        sessionStorage.setItem("SKUINFO", JSON.stringify(this.skuInfo));
+        this.$router.push({
+          name: "addcartsuccess",
+          query: { skuNum: this.skuNum },
+        });
       } catch (error) {
         // 3、失败----给用户提示
         alert(error.message);
