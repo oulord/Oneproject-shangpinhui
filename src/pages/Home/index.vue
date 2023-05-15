@@ -40,6 +40,9 @@ export default {
   mounted() {
     //派发floor组件的action，获取floor组件的数据
     this.$store.dispatch("getFloorList");
+    
+    // 获取用户信息在首页展示
+    this.$store.dispatch('getUserInfo')
   },
 
   computed:{

@@ -50,4 +50,13 @@ export const reqGetCode = (phone) => requests({ url: `/user/passport/sendCode/${
 
 // 注册
 // /api/user/passport/register   POST 
-export const reqUserRegister = (data) => requests({ url: `/user/passport/register`, data: data, method: 'post' })
+export const reqUserRegister = (data) => requests({ url: '/user/passport/register', data: data, method: 'post' })
+
+// 登录
+// /api/user/passport/login  POST 
+export const reqUserLogin = (data) => requests({ url: '/user/passport/login', data: data, method: 'post' })
+
+// 获取用户的信息，需要带着用户的token向服务器要用户信息  通过请求头添加
+// http://182.92.128.115/api/user/passport/auth/getUserInfo   GET
+export const reqUserInfo = () => requests({ url: '/user/passport/auth/getUserInfo', method: 'get' })
+
