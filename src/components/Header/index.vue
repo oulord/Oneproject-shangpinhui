@@ -98,7 +98,15 @@ export default {
     },
 
     // 退出登录
-    
+    async logout() {
+      try {
+        // 1、需要发请求，通知服务器退出登录
+        // 2、清除项目中的信息：userInfo、token
+        await this.$store.dispatch("userLogout");
+        // 回到首页
+        this.$router.push("/home");
+      } catch (error) {}
+    },
   },
 
   mounted() {

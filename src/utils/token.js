@@ -6,3 +6,8 @@ export const setToken = (token) => {
 export const getToken = () => {
     return localStorage.getItem('TOKEN')
 }
+
+// 清除是本地的token
+export const removeToken = () => {
+    localStorage.removeItem('TOKEN')
+}

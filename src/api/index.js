@@ -60,3 +60,7 @@ export const reqUserLogin = (data) => requests({ url: '/user/passport/login', da
 // http://182.92.128.115/api/user/passport/auth/getUserInfo   GET
 export const reqUserInfo = () => requests({ url: '/user/passport/auth/getUserInfo', method: 'get' })
 
+// 退出登录
+// /api/user/passport/logout  GET 
+export const reqLogout = () => requests({ url: '/user/passport/logout', method: 'get' })
+
