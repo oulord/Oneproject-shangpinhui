@@ -7,7 +7,7 @@
     <Rank />
     <Like />
     <!-- floorList 是一个数组，里面有两个对象 -->
-    <Floor v-for="(floor,index) in floorList" :key="floor.id" :list="floor" />
+    <Floor v-for="(floor, index) in floorList" :key="floor.id" :list="floor" />
     <Brand />
   </div>
 </template>
@@ -20,7 +20,7 @@ import Rank from "./Rank";
 import Like from "./Like";
 import Floor from "./Floor";
 import Brand from "./Brand";
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
   name: "Home",
@@ -40,15 +40,12 @@ export default {
   mounted() {
     //派发floor组件的action，获取floor组件的数据
     this.$store.dispatch("getFloorList");
-    
-    // 获取用户信息在首页展示
-    this.$store.dispatch('getUserInfo')
   },
 
-  computed:{
+  computed: {
     ...mapState({
-        floorList:state=>state.home.floorList
-    })
+      floorList: (state) => state.home.floorList,
+    }),
   },
 
   methods: {},

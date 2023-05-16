@@ -86,7 +86,7 @@ const actions = {
             // 请求成功清除token，action内不能操作state，需提交mutation
             commit('CLEAR')
             return 'ok'
-        }else{
+        } else {
             return Promise.reject(new Error('falie'))
         }
     }

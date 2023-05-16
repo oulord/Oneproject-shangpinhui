@@ -2,7 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 // 引入路由配置
 import routes from '@/router/routes'
-
+// 引入store
+import store from '@/store'
 Vue.use(VueRouter)
 
 // 先把VueRouter 原型对象的 push，先保存一份
@@ -32,7 +33,7 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
     }
 }
 
-export default new VueRouter({
+let router = new VueRouter({
     // key 和 value 一致可以省略
     // routes:routes
     routes,
@@ -41,3 +42,41 @@ export default new VueRouter({
         return { y: 0 }
     }
 })
+
+// 全局路由守卫：前置守卫（在路由跳转之间进行判断
+router.beforeEach(async (to, from, next) => {
+    // 用户登录了，才有token，未登录不会有token
+    let token = store.state.user.token
+    // 用户信息
+    let name = store.state.user.userInfo.name
+    // 用户已登录
+    if (token) {
+        // 用户已登录，就不能再去login页面
+        if (to.path == '/login' || to.path == '/register') {
+            next('/')
+        } else {
+            // 登录了，但是去其它组件
+            // 如果用户名有
+            if (name) {
+                next()
+            } else {
+                // 没有用户名，派发action让仓库存储用户信息再跳转
+                try {
+                    // 获取用户信息成功
+                    await store.dispatch('getUserInfo')
+                    next()
+                } catch (error) {
+                    // 登录后，但超过token的请求时间，需重新登录
+                    // 1、清除token
+                    await store.dispatch('userLogout')
+                    next('/login')
+                }
+            }
+        }
+    } else {
+        // 未登录
+        next()
+    }
+})
+
+export default router
