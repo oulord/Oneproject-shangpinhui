@@ -52,7 +52,7 @@ router.beforeEach(async (to, from, next) => {
     // 用户已登录
     if (token) {
         // 用户已登录，就不能再去login页面
-        if (to.path == '/login' || to.path == '/register') {
+        if (to.path == '/login') {
             next('/')
         } else {
             // 登录了，但是去其它组件
@@ -75,7 +75,12 @@ router.beforeEach(async (to, from, next) => {
         }
     } else {
         // 未登录
-        next()
+        let toPath = to.path;
+        if (toPath.indexOf('trade') != -1 || toPath.indexOf('pay') != -1 || toPath.indexOf('center') != -1) {
+            next('/login?redirect=' + toPath);
+        } else {
+            next();
+        }
     }
 })
 
