@@ -7,13 +7,20 @@ import Detail from '@/pages/Detail'
 import AddCartSuccess from '@/pages/AddCartSuccess'
 import ShopCart from '@/pages/ShopCart'
 import Trade from '@/pages/Trade'
+import Pay from '@/pages/Pay'
 
 // 路由配置信息
 export default [
     {
-        name:"trade",
-        path:'/trade',
-        component:Trade,
+        name: 'Pay',
+        path: '/pay',
+        component: Pay,
+        meta: { isShow: true }
+    },
+    {
+        name: "trade",
+        path: '/trade',
+        component: Trade,
         meta: { isShow: true }
     },
     {

@@ -94,7 +94,9 @@
       </ul>
     </div>
     <div class="trade">
-      <div class="price">应付金额:　<span>¥{{ orderInfo.totalAmount }}</span></div>
+      <div class="price">
+        应付金额:　<span>¥{{ orderInfo.totalAmount }}</span>
+      </div>
       <div class="receiveInfo">
         寄送至:
         <span>{{ userDefaultAddress.fullAddress }}</span>
@@ -103,7 +105,7 @@
       </div>
     </div>
     <div class="sub clearFix">
-      <router-link class="subBtn" to="/pay">提交订单</router-link>
+      <a class="subBtn" @click="submitOrder">提交订单</a>
     </div>
   </div>
 </template>
@@ -145,6 +147,30 @@ export default {
         item.isDefault = 0;
       });
       address.isDefault = 1;
+    },
+
+    // 提交订单
+    async submitOrder() {
+      // 交易订单
+      let { tradeNo } = this.orderInfo;
+      // 其余六个参数
+      let data = {
+        // 买家的名字
+        consignee: this.userDefaultAddress.consignee,
+        // 买家的手机号
+        consigneeTel: this.userDefaultAddress.phoneNum,
+        // 买家的地址
+        deliveryAddress: this.userDefaultAddress.fullAddress,
+        // 支付方式
+        paymentWay: "ONLINE",
+        // 买家的留言
+        orderComment: this.msg,
+        // 购物车的商品清单
+        orderDetailList: this.orderInfo.detailArrayList,
+      };
+      // 发请求
+      let result = await this.$API.reqSubmitOrder(tradeNo, data);
+      console.log(result);
     },
   },
 };
