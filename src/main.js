@@ -26,10 +26,17 @@ reqCategoryList();
 import '@/mock/mockServe'
 
 // 引入swiper样式
-import 'swiper/css/swiper.css'
+import "swiper/css/swiper.css"
 
 // 统一引入接口api文件夹里面全部请求函数
 import * as API from '@/api'
+
+// 按需引入Element UI 
+import { Button, MessageBox } from 'element-ui'
+// 使用Element UI
+Vue.use(Button)
+Vue.prototype.$messageBox = MessageBox
+Vue.prototype.$alert = MessageBox.alert
 
 Vue.config.productionTip = false
 
