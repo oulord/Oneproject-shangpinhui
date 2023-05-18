@@ -118,6 +118,7 @@ export default {
     return {
       // 手机买家的留言信息
       msg: "",
+      orderId: "",
     };
   },
 
@@ -170,7 +171,15 @@ export default {
       };
       // 发请求
       let result = await this.$API.reqSubmitOrder(tradeNo, data);
-      console.log(result);
+      // 提交订单成功
+      if (result.code == 200) {
+        this.orderId = result.data;
+        // 路由跳转 + 路由传参
+        this.$router.push("/pay?orderId=" + this.orderId);
+      } else {
+        // 提交失败
+        alert(result.message);
+      }
     },
   },
 };
