@@ -8,9 +8,16 @@ import AddCartSuccess from '@/pages/AddCartSuccess'
 import ShopCart from '@/pages/ShopCart'
 import Trade from '@/pages/Trade'
 import Pay from '@/pages/Pay'
+import PaySuccess from '@/pages/PaySuccess'
 
 // 路由配置信息
 export default [
+    {
+        name: 'paysuccess',
+        path: '/PaySuccess',
+        component: PaySuccess,
+        meta: { isShow: true }
+    },
     {
         name: 'Pay',
         path: '/pay',
