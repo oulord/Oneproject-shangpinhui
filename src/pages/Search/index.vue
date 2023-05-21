@@ -27,11 +27,7 @@
               }}<i @click="removeTradeMark">×</i>
             </li>
             <!-- 平台的售卖的属性值展示 -->
-            <li
-              class="with-x"
-              v-for="(attrValue, index) in searchParams.props"
-              :key="index"
-            >
+            <li class="with-x" v-for="(attrValue, index) in searchParams.props" :key="index">
               {{ attrValue.split(":")[1] }}<i @click="removeAttr(index)">×</i>
             </li>
           </ul>
@@ -58,16 +54,12 @@
           <!-- 销售产品列表 -->
           <div class="goods-list">
             <ul class="yui3-g">
-              <li
-                class="yui3-u-1-5"
-                v-for="(good, index) in goodsList"
-                :key="good.id"
-              >
+              <li class="yui3-u-1-5" v-for="(good, index) in goodsList" :key="good.id">
                 <div class="list-wrap">
                   <div class="p-img">
                     <!-- 在路由跳转的时候切记别忘记带id（params） -->
                     <router-link :to="`/detail/${good.id}`">
-                    <img :src="good.defaultImg"/>
+                      <img :src="good.defaultImg" />
                     </router-link>
                   </div>
                   <div class="price">
@@ -78,26 +70,15 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a
-                      target="_blank"
-                      href="item.html"
-                      title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】"
-                      >{{ good.title }}</a
-                    >
+                    <a target="_blank" href="item.html" title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】">{{ good.title
+                    }}</a>
                   </div>
                   <div class="commit">
                     <i class="command">已有<span>2000</span>人评价</i>
                   </div>
                   <div class="operate">
-                    <a
-                      href="success-cart.html"
-                      target="_blank"
-                      class="sui-btn btn-bordered btn-danger"
-                      >加入购物车</a
-                    >
-                    <a href="javascript:void(0);" class="sui-btn btn-bordered"
-                      >收藏</a
-                    >
+                    <a href="success-cart.html" target="_blank" class="sui-btn btn-bordered btn-danger">加入购物车</a>
+                    <a href="javascript:void(0);" class="sui-btn btn-bordered">收藏</a>
                   </div>
                 </div>
               </li>
@@ -105,13 +86,13 @@
           </div>
           <!-- 分页器 -->
           <!-- 先用死数据进行调试 -->
-          <Pagination :pageNo="searchParams.pageNo" :pageSize="searchParams.pageSize" :total="total" :continues="5" @getPageNo="getPageNo"/>
-          </div>
+          <Pagination :pageNo="searchParams.pageNo" :pageSize="searchParams.pageSize" :total="total" :continues="5"
+            @getPageNo="getPageNo" />
         </div>
       </div>
     </div>
   </div>
-</template>
+</div></template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
