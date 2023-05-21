@@ -17,25 +17,25 @@ import GroupOrder from '@/pages/Center/groupOrder'
 // 路由配置信息
 export default [
     {
-        name:'center',
-        path:'/center',
-        component:Center,
+        name: 'center',
+        path: '/center',
+        component: Center,
         meta: { isShow: true },
         // 二级路由组件
-        children:[
+        children: [
             {
-                name:'myorder',
-                path:'myorder',
-                component:MyOrder
+                name: 'myorder',
+                path: 'myorder',
+                component: MyOrder
             },
             {
-                name:'grouporder',
-                path:'grouporder',
-                component:GroupOrder
+                name: 'grouporder',
+                path: 'grouporder',
+                component: GroupOrder
             },
             {
-                path:'/center',
-                redirect:'/center/myorder'
+                path: '/center',
+                redirect: '/center/myorder'
             }
         ]
     },
@@ -49,13 +49,30 @@ export default [
         name: 'Pay',
         path: '/pay',
         component: Pay,
-        meta: { isShow: true }
+        meta: { isShow: true },
+        beforeEnter: (to, from, next) => {
+            if (from.path = "/trade") {
+                next()
+            } else {
+                next(false)
+            }
+        }
     },
     {
         name: "trade",
         path: '/trade',
         component: Trade,
-        meta: { isShow: true }
+        meta: { isShow: true },
+        // 路由独享守卫
+        beforeEnter: (to, from, next) => {
+            // 去交易页面，必须是从购物车而来
+            if (from.path == "/shopcart") {
+                next()
+            } else {
+                // 其他组件而来，则停留在当前
+                next(false)
+            }
+        }
     },
     {
         name: "shopcart",
